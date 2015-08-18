@@ -2,15 +2,74 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title></title>
+    <title>更新日志</title>
     <link href="css/Initialization.css" rel="stylesheet" />
+    <script src="js/jquery-1.8.3.js"></script>
+    <style>
+        body {
+            text-align: center;
+            cursor: default;
+            background-image: -webkit-gradient(linear, left top, right bottom, from(rgba(22,127,232,0.35)), to(rgba(0,60,123,0.35)));
+            background-image: -webkit-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
+            background-image: -moz-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
+            background-image: -o-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
+            background-image: -ms-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
+            background-image: linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
+            overflow-y: scroll;
+        }
+
+        div {
+            border: 1px solid #808080;
+            border-top: 0px;
+            width: 350px;
+            margin: 5px auto;
+        }
+
+        h2 {
+            background-color: #93C1EA;
+            transition-property: background-color;
+            transition-duration: 300ms;
+            height: 30px;
+            line-height: 30px;
+            border-bottom: 1px solid #808080;
+        }
+
+            h2:hover {
+                cursor: pointer;
+                background-color: #033E76; 
+                color: #fff;
+            }
+
+            h2:active {
+                position: relative;
+                top: 1px;
+               
+            }
+
+        ul li {
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $("ul").hide();
+        });
+        function show(obj) {
+            $(obj).next("ul").stop(true, true).slideToggle(500);
+            var fh = $(obj).find("span").html();
+            fh = fh == "+" ? "-" : "+";
+            $(obj).find("span").html(fh);
+        }
+    </script>
 </head>
 <body>
     <div>
-        <h2>2015-08-18</h2>
+        <h2 onclick="show(this)">2015-08-18<span style="font-size: 27px; position: absolute; left: 109vh;">+</span></h2>
         <ul>
             <li>增加随机丢骰子页面</li>
+            <li>增加弹球页面</li>
             <li>相关的功能请查阅页面_Radom.html</li>
+            <li>相关的功能请查阅页面_Ball.html</li>
         </ul>
     </div>
 

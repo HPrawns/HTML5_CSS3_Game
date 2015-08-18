@@ -57,7 +57,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Ball.html" />
     <Content Include="css\Initialization.css" />
+    <Content Include="img\logo-wow_1.png" />
     <Content Include="js\jquery-1.8.3.js" />
     <Content Include="Log.html" />
     <Content Include="Radom.html" />

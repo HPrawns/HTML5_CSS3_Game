@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="js/jquery-1.8.3.js"></script>
+
+    <script type="text/javascript">
+
+        /*
+        一个类似打砖块的球移动
+        在画布内设置一个移动对象
+        可是球 可以是图片对象(Image)
+        使用自动时间间隔调用函数
+        setInterval来调用
+        每次调用都检测位置
+        根据位置来反弹球
+        canvas 画布左上角坐标 (0,0);
+        右+
+        左-
+        上-
+        下+
+        */
+        var cxt;
+        var ballx = 50;     //球的起始X坐标
+        var bally = 60;         //球的起始Y坐标
+        var ballrad = 10;       //球半径
+
+        var boxx = 20;          //盒子的起始X坐标
+        var boxy = 30;          //盒子的起始Y坐标
+        var boxwidth = 300;     //盒子宽
+        var boxheight = 200;        //盒子高
+
+        var boxright = boxwidth + boxx - ballrad;       //盒子内的碰撞边界-右
+        var boxleft = boxx + ballrad;                           //盒子内的碰撞边界-左
+        var boxtop = boxy + ballrad;                        //盒子内的碰撞边界-上
+        var boxdown = boxy + boxheight - ballrad;           //盒子内的碰撞边界-下
+
+        var ballvx = 4;         //水平移动速度
+        var ballvy = 8;         //垂直移动速度
+
+        //颜色数组
+        var hue = [
+            [255, 0, 0],
+            [255, 255, 0],
+            [0, 255, 0],
+            [0, 255, 255],
+            [0, 0, 255],
+            [255, 0, 255]
+        ];
+        //图片对象
+        var img = new Image();
+        img.src = "img/logo-wow_1.png";
+        var grad;
+        var color;
+
+        function init() {
+            cxt = document.getElementById("canvast").getContext('2d');//实例化对象
+
+            grad = cxt.createLinearGradient(boxx, boxy, boxwidth + boxx, boxheight + boxy); //实例化梯度对象
+            //将颜色数组填充到梯度中
+            for (var i = 0; i < hue.length; i++) {
+                color = 'rgb(' + hue[i][0] + ',' + hue[i][1] + ',' + hue[i][2] + ')';
+                grad.addColorStop(i * 1 / 6, color);
+            }
+
+            cxt.fillStyle = grad;
+            cxt.lineWidth = ballrad;
+            cxt.strokeStyle = "rgb(200,0,50)";
+            moveball();
+            setInterval(moveball, 100);
+
+        }
+        //球移动函数
+        function moveball() {
+            cxt.clearRect(boxx, boxy, boxwidth, boxheight);     //清空画布
+            moveballcheck();            //球位置检测函数
+
+            //对面对象来移动
+            cxt.drawImage(img, ballx - ballrad, bally - ballrad, 2 * ballrad, 2 * ballrad);
+            cxt.fillRect(boxx, boxy, boxwidth, ballrad);        //上边界
+            cxt.fillRect(boxx + boxwidth, boxy, ballrad, boxheight);        //右边界
+            cxt.fillRect(boxx, boxy + boxheight - ballrad, boxwidth, ballrad);        //下边界
+            cxt.fillRect(boxx, boxy, ballrad, boxheight);        //左边界
+        }
+        //球位置检测函数
+        function moveballcheck() {
+            var nballx = ballx + ballvx;        //下个球的X轴位置
+            var nbally = bally + ballvy;        //下个球D的Y轴位置
+            if (nballx > boxright)      //移动后的距离大于右边界
+            {
+                ballvx = -ballvx;           //移动放下向左    
+                nballx = boxright;
+            }
+            if (nballx < boxleft)           //移动后的距离 小于左边界
+            {
+                ballvx = -ballvx;       //移动放下向右
+                nballx = boxleft;
+            }
+            if (nbally > boxdown)       //移动后的距离大于下边界
+            {
+                ballvy = -ballvy;       //移动放下向上
+                nbally = boxdown;
+            }
+            if (nbally < boxtop)        //移动后的距离小于上边界
+            {
+                ballvy = -ballvy;       //移动放下向下
+                nbally = boxtop;
+            }
+            ballx = nballx;              //重新定位坐标X
+            bally = nbally;         //重新定位坐标Y
+        }
+
+    </script>
+
+    <style>
+        .button {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font: 14px/100% Arial, Helvetica, sans-serif;
+            padding: .5em 2em .55em;
+            text-shadow: 0 1px 1px rgba(0,0,0,.3);
+            -webkit-border-radius: .5em;
+            -moz-border-radius: .5em;
+            border-radius: .3em;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+            box-shadow: 0 1px 2px rgba(0,0,0,.2);
+        }
+
+            .button:hover {
+                text-decoration: none;
+            }
+
+            .button:active {
+                position: relative;
+                top: 1px;
+                color: #fcd3a5;
+            }
+
+        body {
+            background-color: rgba(0,0,0,.2);
+        }
+    </style>
+</head>
+<body onload="">
+    <canvas id="canvast" width="500" height="400" style="border: 1px solid black"></canvas>
+    <input type="button" onclick="init()" value="开始" class="button" />
+</body>
+</html>
