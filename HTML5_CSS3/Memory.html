@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="js/jquery-1.8.3.js"></script>
+    <script type="text/javascript">
+        var ctx;
+        var firstpick = true;
+        var firstcard;          //第一次选得牌的相关信息
+        var secondcard;         //第二次选的牌的相关信息
+        var frontbgcolor = "rgb(251,215,73)";       //牌面的背景颜色
+        var polycolor = "rgb(254,11,0)";  //多边形颜色
+        var tablecolor = "rgb(255,255,255)";        //牌背颜色
+        var cardrad = 30;           //半径
+        var deck = [];      //牌数组
+        var firstsx = 30;
+        var firstsy = 50;
+        var margin = 30;        //牌之间的间隔
+        var cardwidht = 4 * cardrad;        //牌宽为多边形半径的4倍
+        var cardheight = 4 * cardrad;
+        var matched;
+        var starttime;
+
+        function Card(sx, sy, swidth, sheight, info) {
+            this.sx = sx;
+            this.sy = sy;
+            this.swidth = swidth;
+            this.sheight = sheight;
+            this.info = info;
+            this.drwa = drawback;
+        }
+        function makedeck() {
+            var i;
+            var acard;
+            var bcard;
+            var cx = firstsx;
+            var cy = firstsy;
+            for (i = 3; i < 9; i++) {
+                acard = new Card(cx, cy, cardwidht, cardheight, i);
+                deck.push(acard);
+                bcard = new Card(cx, cy + cardheight + margin, cardwidht, cardheight, i);
+                deck.push(bcard);
+                cx = cx + cardwidht + margin;
+                acard.drwa();
+                bcard.drwa();
+            }
+            Shuffle();
+        }
+        function Shuffle() {
+            var i;              //保存牌引用的变量
+            var k;              //保存牌引用的变量
+            var holder;             //换牌中间变量
+            var dl = deck.length;       //牌的数量
+            var nt;                     //交换索引
+            for (nt = 0; nt < 3 * dl; nt++) {
+                //随机得到两张牌
+                i = Math.floor(Math.random() * dl);
+                k = Math.floor(Math.random() * dl);
+                //交换2个牌的位置
+                holder = deck[i].info;
+                deck[i].info = deck[k].info;
+                deck[k].info = holder;
+
+            }
+        }
+        function Polycard(sx, sy, rad, n) {
+            this.sx = sx;
+            this.sy = sy;
+            this.rad = rad;
+            this.draw = drawpoly;
+            this.n = n;
+            this.angle = (2 * Math.PI) / n;
+        }
+        function drawpoly() {
+            ctx.fillStyle = frontbgcolor;
+            ctx.fillRect(this.sx - 2 * this.rad, this.sy - 2 * this.rad, 4 * this.rad, 4 * this.rad);
+            ctx.beginPath();
+            ctx.fillStyle = polycolor;
+            var i;
+            var rad = this.rad;
+
+            ctx.moveTo(this.sx + rad * Math.cos(-.5 * this.angle), this.sy + rad * Math.sin(.5 * this.angle));
+            for (i = 0; i < this.n; i++) {
+                ctx.lineTo(this.sx + rad * Math.cos((i - .5) * this.angle), this.sy + rad * Math.sin((i - .5) * this.angle));
+            }
+            ctx.fill();
+        }
+        function drawback() {
+            ctx.fillStyle = tablecolor;
+            ctx.fillRect(this.sx, this.sy, this.swidth, this.sheight);
+        }
+        //点击牌
+        function choose(ev) {
+            var mx;     //鼠标位置
+            var my;
+
+            //两个polygon对象
+            var pick1;
+            var pick2;
+            if (ev.layerX || ev.layerY == 0) {
+                mx = ev.layerX;
+                my = ev.layerY;
+
+            }
+            else if (ev.offsetX || ev.offsetY == 0) {
+                mx = ev.offsetX;
+                my = ev.offsetY;
+
+            }
+            var i;
+            for (i = 0; i < deck.length; i++) {
+                var card = deck[i];
+                if (card.sx >= 0)
+                {
+                    if ((mx > card.sx) && (mx < card.sx + card.swidth) && (my > card.sy) && (my < card.sy + card.sheight))
+                    {
+                            
+                    }
+                }
+            }
+        }
+        function init() {
+            ctx = document.getElementById('canvast').getClientRects("2d");
+
+        }
+
+    </script>
+</head>
+<body>
+    <canvas id="canvast" width="400" height="300" style="border: 1px solid black">asd
+    </canvas>
+</body>
+</html>
