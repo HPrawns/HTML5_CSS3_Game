@@ -7,28 +7,28 @@
     <script src="js/jquery-1.8.3.js"></script>
     <style>
         body {
-            text-align: center;
             cursor: default;
-            background-image: -webkit-gradient(linear, left top, right bottom, from(rgba(22,127,232,0.35)), to(rgba(0,60,123,0.35)));
+            /*background-image: -webkit-gradient(linear, left top, right bottom, from(rgba(22,127,232,0.35)), to(rgba(0,60,123,0.35)));
             background-image: -webkit-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
             background-image: -moz-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
             background-image: -o-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
             background-image: -ms-linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
-            background-image: linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));
+            background-image: linear-gradient(306deg, rgba(22,127,232,0.35), rgba(0,60,123,0.35));*/
             overflow-y: scroll;
         }
 
         div {
             border: 1px solid #808080;
             border-top: 0px;
-            width: 350px;
+            width: 550px;
             margin: 5px auto;
+            
         }
 
         h2 {
             background-color: #93C1EA;
             transition-property: background-color;
-            transition-duration: 300ms;
+            transition-duration: 500ms;
             height: 30px;
             line-height: 30px;
             border-bottom: 1px solid #808080;
@@ -36,18 +36,23 @@
 
             h2:hover {
                 cursor: pointer;
-                background-color: #033E76; 
+                background-color: #033E76;
                 color: #fff;
             }
 
             h2:active {
                 position: relative;
                 top: 1px;
-               
             }
 
         ul li {
             font-size: 14px;
+            list-style:circle;
+        }
+        li {
+            margin-top:5px;
+            margin-left:15px;
+            margin-bottom:5px;
         }
     </style>
     <script>
@@ -64,7 +69,7 @@
 </head>
 <body>
     <div>
-        <h2 onclick="show(this)">2015-08-18<span style="font-size: 27px; position: absolute; left: 109vh;">+</span></h2>
+        <h2 onclick="show(this)">2015-08-18<span style="font-size: 27px; position: absolute; left: 119vh;">+</span></h2>
         <ul>
             <li>增加随机丢骰子页面</li>
             <li>增加弹球页面</li>
@@ -73,10 +78,19 @@
         </ul>
     </div>
     <div>
-        <h2 onclick="show(this)">2015-08-27<span style="font-size: 27px; position: absolute; left: 109vh;">+</span></h2>
+        <h2 onclick="show(this)">2015-08-27<span style="font-size: 27px; position: absolute; left: 119vh;">+</span></h2>
         <ul>
             <li>增加炮弹页面</li>
             <li>相关的功能未完善,失败了</li>
+        </ul>
+    </div>
+
+    <div>
+        <h2 onclick="show(this)">2015-09-15<span style="font-size: 27px; position: absolute; left: 119vh;">+</span></h2>
+        <ul>
+            <li>增加记忆卡牌游戏页面</li>
+            <li>跌跌撞撞好久才搞完,书上的部分代码错误,导致走不通,又去网上找了很久才发现源码</li>
+            <li>对js的作用域又有了新的认识,例如 for循环中的i可以在循环的大括号外面调用</li>
         </ul>
     </div>
 </body>

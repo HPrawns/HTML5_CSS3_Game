@@ -1,5 +1,5 @@
 E:\GIT\HTML5_CSS3_Game\HTML5_CSS3\bin\HTML5_CSS3.dll
 E:\GIT\HTML5_CSS3_Game\HTML5_CSS3\bin\HTML5_CSS3.pdb
-E:\GIT\HTML5_CSS3_Game\HTML5_CSS3\obj\Debug\HTML5_CSS3.csprojResolveAssemblyReference.cache
 E:\GIT\HTML5_CSS3_Game\HTML5_CSS3\obj\Debug\HTML5_CSS3.dll
 E:\GIT\HTML5_CSS3_Game\HTML5_CSS3\obj\Debug\HTML5_CSS3.pdb
+E:\GIT\HTML5_CSS3_Game\HTML5_CSS3\obj\Debug\HTML5_CSS3.csprojResolveAssemblyReference.cache

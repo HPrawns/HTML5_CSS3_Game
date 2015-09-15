@@ -6,30 +6,36 @@
     <script src="js/jquery-1.8.3.js"></script>
     <script type="text/javascript">
         var ctx;
-        var firstpick = true;
-        var firstcard;          //第一次选得牌的相关信息
-        var secondcard;         //第二次选的牌的相关信息
-        var frontbgcolor = "rgb(251,215,73)";       //牌面的背景颜色
-        var polycolor = "rgb(254,11,0)";  //多边形颜色
-        var tablecolor = "rgb(255,255,255)";        //牌背颜色
+        var firstpick = true;                               //是否是第一选牌
+        var firstcard;                                      //第一次选得牌的相关信息
+        var secondcard;                                 //第二次选的牌的相关信息
+        var frontbgcolor = "rgb(251,215,73)";       //牌面的背景颜色黄
+        var polycolor = "rgb(254,11,222)";  //多边形颜色紫
+        var tablecolor = "rgb(255,255,255)";           //牌背颜色白色
+        var backcolor = "rgb(128,0,128)";
         var cardrad = 30;           //半径
         var deck = [];      //牌数组
-        var firstsx = 30;
-        var firstsy = 50;
+        var firstsx = 30;           //第一张牌起始X位置
+        var firstsy = 50;           //第一张牌起始Y位置
         var margin = 30;        //牌之间的间隔
-        var cardwidht = 4 * cardrad;        //牌宽为多边形半径的4倍
+        var cardwidth = 4 * cardrad;        //牌宽为多边形半径的4倍
         var cardheight = 4 * cardrad;
         var matched;
         var starttime;
 
+        //每个卡片的构造函数
         function Card(sx, sy, swidth, sheight, info) {
             this.sx = sx;
             this.sy = sy;
             this.swidth = swidth;
             this.sheight = sheight;
             this.info = info;
-            this.drwa = drawback;
+            this.draw = drawback;
         }
+        /*
+        初始化12张卡
+        把下标作为识别信息
+        */
         function makedeck() {
             var i;
             var acard;
@@ -37,16 +43,17 @@
             var cx = firstsx;
             var cy = firstsy;
             for (i = 3; i < 9; i++) {
-                acard = new Card(cx, cy, cardwidht, cardheight, i);
+                acard = new Card(cx, cy, cardwidth, cardheight, i);
                 deck.push(acard);
-                bcard = new Card(cx, cy + cardheight + margin, cardwidht, cardheight, i);
+                bcard = new Card(cx, cy + cardheight + margin, cardwidth, cardheight, i);
                 deck.push(bcard);
-                cx = cx + cardwidht + margin;
-                acard.drwa();
-                bcard.drwa();
+                cx = cx + cardwidth + margin;
+                acard.draw();
+                bcard.draw();
             }
             Shuffle();
         }
+        //打乱所有卡的顺序
         function Shuffle() {
             var i;              //保存牌引用的变量
             var k;              //保存牌引用的变量
@@ -61,33 +68,35 @@
                 holder = deck[i].info;
                 deck[i].info = deck[k].info;
                 deck[k].info = holder;
-
             }
         }
+        //卡内多边形的构造函数
         function Polycard(sx, sy, rad, n) {
             this.sx = sx;
             this.sy = sy;
             this.rad = rad;
             this.draw = drawpoly;
-            this.n = n;
-            this.angle = (2 * Math.PI) / n;
+            this.n = n;             //多边形的 边数量
+            this.angle = (2 * Math.PI) / n;     //每个角的角度
         }
+        //绘制多边形基础函数
         function drawpoly() {
             ctx.fillStyle = frontbgcolor;
+            ctx.strokeStyle = backcolor;
             ctx.fillRect(this.sx - 2 * this.rad, this.sy - 2 * this.rad, 4 * this.rad, 4 * this.rad);
             ctx.beginPath();
-            ctx.fillStyle = polycolor;
+            ctx.fillStyle = backcolor;
             var i;
             var rad = this.rad;
-
-            ctx.moveTo(this.sx + rad * Math.cos(-.5 * this.angle), this.sy + rad * Math.sin(.5 * this.angle));
-            for (i = 0; i < this.n; i++) {
+            ctx.moveTo(this.sx + rad * Math.cos(-.5 * this.angle), this.sy + rad * Math.sin(-.5 * this.angle));
+            for (i = 1; i < this.n; i++) {
                 ctx.lineTo(this.sx + rad * Math.cos((i - .5) * this.angle), this.sy + rad * Math.sin((i - .5) * this.angle));
             }
             ctx.fill();
         }
+        //画矩形基础方法
         function drawback() {
-            ctx.fillStyle = tablecolor;
+            ctx.fillStyle = backcolor;
             ctx.fillRect(this.sx, this.sy, this.swidth, this.sheight);
         }
         //点击牌
@@ -106,29 +115,90 @@
             else if (ev.offsetX || ev.offsetY == 0) {
                 mx = ev.offsetX;
                 my = ev.offsetY;
-
             }
             var i;
             for (i = 0; i < deck.length; i++) {
                 var card = deck[i];
                 if (card.sx >= 0)
-                {
-                    if ((mx > card.sx) && (mx < card.sx + card.swidth) && (my > card.sy) && (my < card.sy + card.sheight))
-                    {
-                            
+                    //识别鼠标是否在排上
+                    if ((mx > card.sx) && (mx < card.sx + card.swidth) && (my > card.sy) && (my < card.sy + card.sheight)) {
+                        if ((firstpick) || (i != firstcard)) { break; } //是否是第一次选牌和第几张牌 
                     }
+            }
+            if (i < deck.length) {
+                //画第一张点开的牌
+                if (firstpick) {
+                    firstcard = i;
+                    firstpick = false;
+                    pick1 = new Polycard(card.sx + cardwidth * .5, card.sy + cardheight * .5, cardrad, card.info);
+                    pick1.draw();
+                }
+                else {
+                    //第二章
+                    secondcard = i;
+                    pick2 = new Polycard(card.sx + cardwidth * .5, card.sy + cardheight * .5, cardrad, card.info);
+                    pick2.draw();
+                    //判断是否是一组牌
+                    if (deck[i].info == deck[firstcard].info) {
+                        matched = true;
+                        var nm = 1 + Number(document.f.count.value);
+                        document.f.count.value = String(nm);
+                        if (nm > .5 * deck.length) {
+                            var now = new Date();
+                            var nt = Number(now.getDate());
+                            var seconds = Math.floor(.5 + (nt - starttime) / 1000);
+                            document.f.elaspsed.value = String(seconds);
+                        }
+                    }
+                    else {
+                        matched = false;  //是否2张卡选对了
+                    }
+                    firstpick = true;
+                    //启动计时,并调用消牌函数
+                    setTimeout(flipback, 500);
                 }
             }
         }
+        //消牌
+        function flipback() {
+            var card;
+            if (!matched) {     //如果没有选对就把牌翻过来
+                deck[firstcard].draw();
+                deck[secondcard].draw();
+            }
+            else {              //否者  清空这2个牌
+                ctx.fillStyle = tablecolor;
+                ctx.fillRect(deck[secondcard].sx, deck[secondcard].sy, deck[secondcard].swidth, deck[secondcard].sheight);
+                ctx.fillRect(deck[firstcard].sx, deck[firstcard].sy, deck[firstcard].swidth, deck[firstcard].sheight);
+                deck[secondcard].sx = -1;
+                deck[firstcard].sx = -1;
+            }
+        }
         function init() {
-            ctx = document.getElementById('canvast').getClientRects("2d");
+            ctx = document.getElementById('canvast').getContext("2d");
+
+            canvast1 = document.getElementById('canvast');
+            canvast1.addEventListener('click', choose, false);
+
+            makedeck();
+            document.f.count.value = 0;
+            document.f.elapsed.value = "";
+            starttime = new Date();
+            starttime = Number(starttime.getDate());
+            Shuffle();
 
         }
 
     </script>
 </head>
-<body>
-    <canvas id="canvast" width="400" height="300" style="border: 1px solid black">asd
+<body onload="init()">
+    <canvas id="canvast" width="1000" height="400" style="border: 1px solid black">有问题
     </canvas>
+    <br />
+    <form name="f">
+        <input type="text" name="count" value="0" size="1" />
+
+        <input type="text" name="elapsed" value="" size="4" />
+    </form>
 </body>
 </html>
