@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        .thing {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            border: 2px double white;
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
+    <script type="text/javascript">
+        var facts = [
+            ["中国", "北京", false],
+            ["印度", "新德里", false],
+            ["欧盟", "布鲁塞尔", false],
+            ["印度尼西亚", "雅加达", false],
+            ["巴西", "巴西利亚", false],
+            ["俄罗斯", "莫斯科", false],
+            ["日本", "东京", false],
+            ["墨西哥", "墨西哥城", false],
+            ["德国", "柏林", false],
+            ["土耳其", "安卡拉", false],
+            ["法国", "巴黎", false],
+            ["英国", "伦敦", false],
+            ["意大利", "罗马", false],
+            ["南非", "比勒陀利亚", false],
+            ["南韩", "首尔", false],
+            ["阿根廷", "布宜诺斯艾利斯", false],
+            ["加拿大", "温哥华", false],
+            ["沙特阿拉伯", "利雅得", false],
+            ["澳大利亚", "堪培拉", false],
+        ];
+        var thingelem;      //
+        var nq = 4;         //一次显示几对
+        var elementinmotion;
+        var makingmove = false;
+        var inbetween = 300;
+        var col1 = 200;
+        var row1 = 200;
+        var rowsize = 50;
+
+        var slots = new Array(nq);
+        function init() {
+
+        }
+        function setupgame() {
+            var i;
+            var c;
+            var s;
+            var mx = col1;
+            var my = row1;
+            var d;
+            var uniqueid;
+            for (i = 0; i < facts.length; i++) {
+                facts[i][2] = false;
+            }
+            for (i = 0; i < nq; i++) {
+                slots[i] = -100;
+            }
+            for (var i = 0; i < length; i++) {
+                do {
+                    c = Math.floor(Math.random() * facts.length);
+                } while (facts[c][2] == true);
+                facts[c][2] = true;
+                uniqueid = "c" + String(c);
+                d = document.createElement('country');
+                d.innerHTML = ("<div class='thing' id='" + uniqueid + "'>占位符</div>");
+                document.body.appendChild(d);
+                thingelem = document.getElementById(uniqueid);
+                thingelem.textContent = facts[c][0];
+                thingelem.style.top = String(mx) + "px";
+                thingelem.style.left = String(my) + "px";
+                thingelem.addEventListener('click', pickelement, false);
+                uniqueid = "p" + String(c);
+                document.createElement('cap');
+                d.innerHTML = ("<div class='thing' id='" + uniqueid + "'>占位符</div>");
+                document.body.appendChild(d);
+                thingelem = document.getElementById(uniqueid);
+                thingelem.textContent = facts[c][1];
+                do {
+                    s = Math.floor(Math.random() * nq);
+                    slots[s] = c;
+                    thingelem.style.top = String(row1 + s * rowsize) + "px";
+                    thingelem.style.left = String(col1 + inbetween) + "px";
+                    thingelem.addEventListener('click', pickelement, false);
+                    my += rowsize;
+                } while (slots[s] >= 0)
+                document.f.score.value = "0";
+            }
+
+            function pickelement(ev) {
+                var thisx;
+                var thisxn;
+                if (makingmove)
+                {
+
+                }
+            }
+
+
+
+
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
